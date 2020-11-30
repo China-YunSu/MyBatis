@@ -1,6 +1,7 @@
 package man.kuke.dao;
 
 import man.kuke.model.Person;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
@@ -97,6 +98,69 @@ public class UserDaoTest {
          */
         Person person = mapper.getPersonByMap(map);
         System.out.println(person);
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    @Test
+    public void queryByLimit() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Map<String, Object> map = new HashMap<>();
+        map.put("beginIndex", 1);
+        map.put("endIndex", 1);
+        List<Person> personByLimit = mapper.getPersonByLimit(map);
+        for (Person person : personByLimit) {
+            System.out.println(person);
+        }
+    }
+
+    @Test
+    public void queryByLimit2() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        RowBounds rowBounds = new RowBounds(1, 1);
+
+
+        List<Person> objects = sqlSession.selectList("man.kuke.dao.UserMapper.getPersonByBounds",null,rowBounds);
+        for (Person object : objects) {
+            System.out.println();
+         }
+    }
+
+    @Test
+    public void getPersonByAnno() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Person personByAnno = mapper.getPersonByAnno("06181040");
+        System.out.println(personByAnno);
+
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    @Test
+    public void deletePersonByAnno() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        mapper.deletePersonByAnno("06181041");
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    @Test
+    public void addPersonByAnno() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        mapper.addPersonByAnno("06181041","马林静");
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    @Test
+    public void modifyPersonByAnno() {
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        mapper.updatePersonByAnno(new Person("06181039","李柯柯"));
         sqlSession.commit();
         sqlSession.close();
     }

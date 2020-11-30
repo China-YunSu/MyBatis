@@ -12,9 +12,9 @@
             select * from person
     </select>
 <!--    单查询-->
-    <select id="getPersonById" resultType="Person" parameterType="string" >
-            select * from person where id = #{id}
-    </select>
+<!--    <select id="getPersonById" resultType="Person" parameterType="string" >-->
+<!--            select * from person where id = #{id}-->
+<!--    </select>-->
 <!--    单插入-->
 <!--    void 类型可以不写-->
     <select id="addPerson" parameterType="Person">
@@ -36,6 +36,24 @@
     </select>
 
 
+<!--
+    如果字段和成员名不一样；
+    方式一：起别名
+    可以在sql 语句 加入成员名，例如：
+    select id ID,name from person
+    id 字段名 ID成员名
+
+    方式二：resultMap
+    结果集映射
+-->
+    <resultMap id="UserMap" type="Person">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <select id="getPersonById" resultMap="UserMap" parameterType="string" >
+        select * from person where id = #{id}
+    </select>
 <!--    map 参数查询-->
 <!--    map 可以任意设定键名字 -->
 <!--    ID 键名 对应 学号"06181040-->
@@ -44,4 +62,18 @@
     <select id="getPersonByMap" resultType="Person" parameterType="map" >
         select * from person where id = #{ID}
     </select>
+
+<!--    分页1limit-->
+    <select id="getPersonByLimit" resultMap="UserMap" resultType="Person"
+            parameterType="map">
+<!-- limit beginindex 开始地方
+            endindex 每页行数-->
+        select * from myemployees.person limit #{beginIndex},#{endIndex}
+    </select>
+
+<!--    分页2-->
+    <select id="getPersonByBounds" resultMap="UserMap">
+        select * from person
+    </select>
+
 </mapper>

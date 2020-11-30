@@ -5,6 +5,26 @@
 <configuration>
     <properties resource="db.properties"/>
 
+
+    <settings>
+        <!--  日志设置：logImpl
+              指定 MyBatis 所用日志的具体实现，未指定时将自动查找
+              SLF4J | LOG4J | LOG4J2 | JDK_LOGGING | COMMONS_LOGGING | STDOUT_LOGGING | NO_LOGGING
+              STDOUT_LOGGING 标准日志
+        -->
+<!--        <setting name="logImpl" value="STDOUT_LOGGING"/>-->
+<!--            什么是log4j？-->
+<!--            使用log4j，我们可以控制日志信息输送-->
+<!--            的目的地是控制台、文件、GUI
+                控制每一条日志输出格式；
+                通过定义每一条日志信息的级别，
+                我们能够更加细致的控制日志的生成过程。
+                可以通过配置文件设置
+            -->
+            <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+<!--    类其别名-->
     <typeAliases>
         <typeAlias type="man.kuke.model.Person" alias="Person"/>
     </typeAliases>
@@ -49,5 +69,25 @@
 <!--        </resources>-->
         <!--    每一个Mapper.xml 都需要在mybatis核心配置文件中注册-->
         <mapper resource="man/kuke/dao/UserMapper.xml"/>
+
+<!--
+  推荐：   方式一：
+                <mapper resource="man/kuke/dao/UserMapper.xml"/>
+           方式二：
+           使用class文件绑定注册
+           <mapper class="man.kuke.dao.UserMapper"/>
+
+           注意点：
+           接口和他的Mapper配置文件必须同名
+           接口和他的Mapper配置文件必须在同一个包下
+
+           方式三：使用扫描包进行注入绑定
+           <mappers>
+                <package name="man.kuke.dao"/>
+           </mappers>
+           注意点：
+           接口和他的Mapper配置文件必须同名
+           接口和他的Mapper配置文件必须在同一个包下
+  -->
     </mappers>
 </configuration>

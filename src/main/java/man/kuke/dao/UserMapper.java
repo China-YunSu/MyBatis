@@ -1,6 +1,8 @@
 package man.kuke.dao;
 
 import man.kuke.model.Person;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +27,29 @@ public interface UserMapper {
     void deletePerson(Person person);
     //模糊查询
     List<Person> getPersonByLike(Person person);
+    //limit
+    List<Person> getPersonByLimit(Map<String,Object> map);
+    //bounds
+    List<Person> getPersonByBounds();
+
+    /**
+     * 注解
+     * //@param()
+     * 基本类型的参数或者String类型，需要加上
+     * 引用类型不需要加
+     * 如果只有一个基本类型的话，可以忽略，建议加上
+     * 我们在sql中引用的就是这里@Param（）中设定的属性名
+     * #{} ${}
+     */
+    @Select("select * from person where id = #{id}")
+    Person getPersonByAnno(String id);
+
+    @Select("insert into person(id,name) values(#{id},#{name})")
+    void addPersonByAnno(@Param("id")String id, @Param("name")String name);
+
+    @Select("delete from person where id=#{id}")
+    void deletePersonByAnno(@Param("id")String id);
+
+    @Select("update person set id=#{id},name=#{name} where id=#{id}")
+    void updatePersonByAnno(Person person);
 }
